@@ -132,6 +132,11 @@ var Example = (function (_React$Component) {
         React.createElement(
           'p',
           null,
+          'For this example, duration is set to 500ms, and check console for callbacks.'
+        ),
+        React.createElement(
+          'p',
+          null,
           'Current Height: ',
           React.createElement(
             'b',
@@ -187,6 +192,13 @@ var Example = (function (_React$Component) {
           AnimateHeight,
           {
             height: height2,
+            duration: 500,
+            onAnimationEnd: function () {
+              console.log('React Animate Height - animation ended');
+            },
+            onAnimationStart: function () {
+              console.log('React Animate Height - animation started');
+            },
             className: 'demo demo-2'
           },
           React.createElement(
