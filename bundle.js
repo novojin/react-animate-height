@@ -1081,6 +1081,26 @@ var ANIMATION_STATE_CLASSES = {
   staticHeightSpecific: 'rah-static--height-specific'
 };
 
+function omit(obj) {
+  for (var _len = arguments.length, keys = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    keys[_key - 1] = arguments[_key];
+  }
+
+  if (!keys.length) {
+    return obj;
+  }
+
+  var res = {};
+
+  for (var key in obj) {
+    if (keys.indexOf(key) === -1) {
+      res[key] = obj[key];
+    }
+  }
+
+  return res;
+}
+
 var AnimateHeight = (function (_React$Component) {
   _inherits(AnimateHeight, _React$Component);
 
@@ -1266,6 +1286,7 @@ var AnimateHeight = (function (_React$Component) {
 
       // Include transition passed through styles
       var userTransition = style.transition ? style.transition + ',' : '';
+      var transitionString = userTransition + ' height ' + duration + 'ms ' + easing + ' ';
 
       var componentStyle = _extends({}, style, {
         height: height,
@@ -1273,21 +1294,24 @@ var AnimateHeight = (function (_React$Component) {
       });
 
       if (shouldUseTransitions) {
-        componentStyle.WebkitTransition = userTransition + ' height ' + duration + 'ms ' + easing + ' ';
-        componentStyle.MozTransition = userTransition + ' height ' + duration + 'ms ' + easing + ' ';
-        componentStyle.OTransition = userTransition + ' height ' + duration + 'ms ' + easing + ' ';
-        componentStyle.msTransition = userTransition + ' height ' + duration + 'ms ' + easing + ' ';
-        componentStyle.transition = userTransition + ' height ' + duration + 'ms ' + easing + ' ';
+        componentStyle.WebkitTransition = transitionString;
+        componentStyle.MozTransition = transitionString;
+        componentStyle.OTransition = transitionString;
+        componentStyle.msTransition = transitionString;
+        componentStyle.transition = transitionString;
       }
 
       var componentClasses = cx((_cx3 = {}, _defineProperty(_cx3, animationStateClasses, true), _defineProperty(_cx3, className, className), _cx3));
 
+      var propsToOmit = ['height', 'duration', 'easing', 'contentClassName', 'animationStateClasses'];
+
       return React.createElement(
         'div',
-        {
+        _extends({}, omit.apply(undefined, [this.props].concat(propsToOmit)), {
+          'aria-hidden': height === 0,
           className: componentClasses,
           style: componentStyle
-        },
+        }),
         React.createElement(
           'div',
           {
